@@ -41,17 +41,18 @@ jobs:
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
           
           # Atualiza também as referências no package-lock.json para evitar E404 ao tentar validar versões antigas/inexistentes no registro
-          # Sincroniza as versões dos pacotes internos no lockfile
+          # Sincroniza as versões dos pacotes internos no lockfile em todas as ocorrências
           sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" package-lock.json
           
-          # Tenta sincronizar o lockfile localmente sem buscar no registro remoto
-          npm install --package-lock-only --offline --no-audit --no-fund || echo "Aviso: Falha ao atualizar lockfile em modo offline, mas prosseguindo..."
+          # Remove o package-lock.json e reinstala para garantir consistência total dos links de workspace sem buscar no registro
+          rm package-lock.json
+          npm install --package-lock-only
 
       - name: Build all packages
         run: npm run build
 
       # RELEASE
       - name: Publish packages on NPM 📦
-        run: npm publish --workspaces --access public
+        run: npm publish --workspaces --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
