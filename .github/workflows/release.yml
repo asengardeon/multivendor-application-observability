@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build all packages
-        run: npm run build
-
       - name: Extract version from tag 🏷️
         id: extract_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
@@ -42,6 +39,9 @@ jobs:
           # O sed substituirá a versão de qualquer pacote @multivendor/* pela atual da release
           # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
+
+      - name: Build all packages
+        run: npm run build
 
       # RELEASE
       - name: Publish packages on NPM 📦
