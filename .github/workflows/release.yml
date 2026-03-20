@@ -39,6 +39,9 @@ jobs:
           # O sed substituirá a versão de qualquer pacote @multivendor/* pela atual da release
           # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
+          
+          # Atualiza o package-lock.json para refletir as novas versões locais e evitar 404 no publish
+          npm install --package-lock-only
 
       - name: Build all packages
         run: npm run build
