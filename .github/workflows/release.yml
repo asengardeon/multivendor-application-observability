@@ -33,6 +33,7 @@ jobs:
           echo "Updating all packages to version $VERSION"
           
           # Atualiza a versão do root e de todos os workspaces
+          # O flag --include-workspace-root garante a atualização na raiz
           npm version $VERSION --no-git-tag-version --include-workspace-root --workspaces
           
           # Atualiza as dependências internas (@multivendor/*) em cada package.json
@@ -40,19 +41,20 @@ jobs:
           # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
           
-          # Atualiza também as referências no package-lock.json para evitar E404 ao tentar validar versões antigas/inexistentes no registro
-          # Sincroniza as versões dos pacotes internos no lockfile em todas as ocorrências
-          sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" package-lock.json
-          
-          # Tenta sincronizar o lockfile localmente sem buscar no registro remoto.
-          # Usamos --offline para garantir que o NPM não tente baixar versões que ainda não existem.
-          npm install --package-lock-only --offline --no-audit --no-fund || echo "Aviso: Falha ao atualizar lockfile em modo offline, mas prosseguindo..."
+          # Removido npm install --package-lock-only pois ele tenta validar as novas versões contra o registro público e falha com 404
+          # Ao rodar o build e o publish, o npm usará os arquivos locais dos workspaces
+          # Se necessário, o npm publish pode ser executado sem validar o lockfile inconsistente
 
       - name: Build all packages
         run: npm run build
 
       # RELEASE
       - name: Publish packages on NPM 📦
-        run: npm publish --workspaces --access public --no-git-checks
+        run: |
+          # Remove o package-lock.json antes do publish para garantir que o NPM 
+          # publique com base nos arquivos package.json atualizados, 
+          # evitando erros de validação com o registro remoto.
+          rm -f package-lock.json
+          npm publish --workspaces --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
