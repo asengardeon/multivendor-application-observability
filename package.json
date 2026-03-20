@@ -1,6 +1,6 @@
 {
-  "name": "asengardeons-observability",
-  "version": "0.0.15-beta",
+  "name": "@multivendor/observability",
+  "version": "0.0.6-beta",
   "description": "Enterprise Observability Abstraction (OpenTelemetry)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
