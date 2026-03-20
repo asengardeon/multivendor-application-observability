@@ -1,19 +1,19 @@
-# @multivendor/observability
+# asengardeons-observability
 
 Enterprise Observability Abstraction (OpenTelemetry).
 
-Esta biblioteca fornece uma abstração unificada para observabilidade utilizando OpenTelemetry.
+Esta biblioteca fornece uma abraçação unificada para observabilidade utilizando OpenTelemetry.
 
 ## Instalação
 
 ```bash
-npm install @multivendor/observability @opentelemetry/api
+npm install asengardeons-observability @opentelemetry/api
 ```
 
 ## Como Usar
 
 ```typescript
-import { getTracer, getMetrics, getLogger } from '@multivendor/observability';
+import { getTracer, getMetrics, getLogger } from 'asengardeons-observability';
 
 const tracer = getTracer('my-service');
 // ...
@@ -38,7 +38,7 @@ tracer.startActiveSpan('process', (span) => {
 Interface para expor o estado da aplicação.
 
 ```typescript
-import { registerHealthCheck, HealthStatus } from '@multivendor/obs-core';
+import { registerHealthCheck, HealthStatus } from 'asengardeons-observability';
 
 registerHealthCheck({
   getName: () => 'database',
@@ -60,7 +60,7 @@ A biblioteca oferece um middleware para facilitar a instrumentação de aplicaç
 
 ```typescript
 import express from 'express';
-import { expressMiddleware } from '@multivendor/obs-core';
+import { expressMiddleware } from 'asengardeons-observability';
 
 const app = express();
 
@@ -79,7 +79,7 @@ app.listen(3000);
 Você pode substituir o logger interno da biblioteca (usado para diagnóstico) por um logger da sua preferência (ex: Winston, Pino).
 
 ```typescript
-import { setInternalLogger } from '@multivendor/obs-core';
+import { setInternalLogger } from 'asengardeons-observability';
 
 setInternalLogger({
   info: (msg, ...args) => myCustomLogger.info(msg, ...args),
