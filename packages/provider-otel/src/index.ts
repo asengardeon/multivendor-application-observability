@@ -82,21 +82,28 @@ class OTelMetricsWrapper implements ITelemetryMetrics {
   }
 
   registerNativeMetrics(): void {
-    // No OTel real, o usuário precisaria ter instalado @opentelemetry/host-metrics
-    // e inicializado o HostMetrics. Como nossa lib é uma abstração,
-    // aqui seria o lugar de plugar essa inicialização se as dependências existirem.
     try {
       if (typeof require !== 'undefined') {
-        // Exemplo de como poderia ser a implementação real:
-        // const { HostMetrics } = require('@opentelemetry/host-metrics');
-        // const hostMetrics = new HostMetrics({ meterProvider: metrics.getMeterProvider(), name: this.name });
-        // hostMetrics.start();
+        const { HostMetrics } = require('@opentelemetry/host-metrics')
+        const { metrics } = require('@opentelemetry/api')
+
+        const hostMetrics = new HostMetrics({
+          meterProvider: metrics.getMeterProvider(),
+          name: this.name
+        })
+
+        hostMetrics.start()
+
+        if (this.logger) {
+          this.logger.info(`Host metrics iniciadas com sucesso para ${this.name}.`)
+        }
       }
     } catch (e) {
+      const message = `@opentelemetry/host-metrics não encontrado ou erro ao iniciar. Métricas nativas não serão coletadas para ${this.name}.`
       if (this.logger) {
-        this.logger.warn(`@opentelemetry/host-metrics não encontrado. Métricas nativas não serão coletadas para ${this.name}.`)
+        this.logger.warn(message)
       } else {
-        console.warn(`[OTel] @opentelemetry/host-metrics não encontrado. Métricas nativas não serão coletadas para ${this.name}.`)
+        console.warn(`[OTel] ${message}`)
       }
     }
   }
