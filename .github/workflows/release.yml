@@ -44,8 +44,6 @@ jobs:
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
 
       # RELEASE
-      - name: Install dependencies and build 🔧
-        run: npm ci
       - name: Publish packages on NPM 📦
         run: npm publish --workspaces --access public
         env:
