@@ -27,34 +27,17 @@ jobs:
         id: extract_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Update version across all packages 🔄
+      - name: Update package version 🔄
         run: |
           VERSION=${{ steps.extract_version.outputs.VERSION }}
-          echo "Updating all packages to version $VERSION"
-          
-          # Atualiza a versão do root e de todos os workspaces
-          # O flag --include-workspace-root garante a atualização na raiz
-          npm version $VERSION --no-git-tag-version --include-workspace-root --workspaces
-          
-          # Atualiza as dependências internas (@multivendor/*) em cada package.json
-          # O sed substituirá a versão de qualquer pacote @multivendor/* pela atual da release
-          # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
-          find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
-          
-          # Removido npm install --package-lock-only pois ele tenta validar as novas versões contra o registro público e falha com 404
-          # Ao rodar o build e o publish, o npm usará os arquivos locais dos workspaces
-          # Se necessário, o npm publish pode ser executado sem validar o lockfile inconsistente
+          echo "Updating package to version $VERSION"
+          npm version $VERSION --no-git-tag-version
 
-      - name: Build all packages
+      - name: Build package
         run: npm run build
 
       # RELEASE
-      - name: Publish packages on NPM 📦
-        run: |
-          # Remove o package-lock.json antes do publish para garantir que o NPM 
-          # publique com base nos arquivos package.json atualizados, 
-          # evitando erros de validação com o registro remoto.
-          rm -f package-lock.json
-          npm publish --workspaces --access public --no-git-checks
+      - name: Publish package on NPM 📦
+        run: npm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

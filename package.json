@@ -1,19 +1,36 @@
 {
-  "name": "multivendor-application-observability",
+  "name": "@multivendor/observability",
   "version": "0.0.6-beta",
-  "description": "Enterprise Observability Abstraction (OTel, NR, Datadog)",
+  "description": "Enterprise Observability Abstraction (OpenTelemetry)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "tsc",
     "prepublishOnly": "npm run build"
   },
+  "peerDependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/host-metrics": "^0.35.0"
+  },
   "devDependencies": {
-    "typescript": "^5.0.4"
-  }
+    "typescript": "^5.0.4",
+    "@types/node": "^20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/multivendor-application-observability.git"
+  },
+  "keywords": [
+    "observability",
+    "tracing",
+    "metrics",
+    "logs",
+    "opentelemetry"
+  ],
+  "author": "CDO Platform Team",
+  "license": "ISC"
 }

@@ -1,62 +1,22 @@
-# multivendor-application-observability (Monorepo)
+# @multivendor/observability
 
-Enterprise Observability Abstraction (OTel, NR, Datadog).
+Enterprise Observability Abstraction (OpenTelemetry).
 
-Esta biblioteca foi dividida em pacotes modulares para garantir que você instale apenas o que for necessário.
+Esta biblioteca fornece uma abstração unificada para observabilidade utilizando OpenTelemetry.
 
 ## Instalação
 
-### 1. Core da Biblioteca (Obrigatório)
-
-O `@multivendor/obs-core` contém as interfaces, o middleware Express e a lógica de abstração.
-
 ```bash
-npm install @multivendor/obs-core
-```
-
-### 2. Escolhendo seu Provedor
-
-Instale o pacote do provedor que deseja utilizar. A biblioteca continuará utilizando a variável de ambiente `OBSERVABILITY_VENDOR` para carregar o provedor correto em runtime.
-
-#### OpenTelemetry (Padrão)
-```bash
-npm install @multivendor/obs-provider-otel @opentelemetry/api
-```
-
-#### Datadog
-```bash
-npm install @multivendor/obs-provider-datadog dd-trace
-```
-
-#### New Relic
-```bash
-npm install @multivendor/obs-provider-newrelic newrelic
-```
-
-## Configuração
-
-A variável de ambiente `OBSERVABILITY_VENDOR` define qual pacote será carregado dinamicamente:
-
-| Valor | Pacote Carregado |
-|-------|------------------|
-| `otel` (padrão) | `@multivendor/obs-provider-otel` |
-| `datadog` | `@multivendor/obs-provider-datadog` |
-| `newrelic` | `@multivendor/obs-provider-newrelic` |
-
-Exemplo:
-```bash
-OBSERVABILITY_VENDOR=datadog node dist/index.js
+npm install @multivendor/observability @opentelemetry/api
 ```
 
 ## Como Usar
 
-As importações agora devem ser feitas a partir do `@multivendor/obs-core`:
-
 ```typescript
-import { getTracer, getMetrics, getLogger } from '@multivendor/obs-core';
+import { getTracer, getMetrics, getLogger } from '@multivendor/observability';
 
 const tracer = getTracer('my-service');
-// ... resto do uso permanece igual
+// ...
 ```
 
 ### Propagação de Contexto (Baggage)

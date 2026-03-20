@@ -22,7 +22,7 @@ import {
   IHistogram,
   IMetricAttributes,
   IInternalLogger
-} from '@multivendor/obs-core'
+} from '../../interfaces'
 
 // OpenTelemetry api can export baggage as a constant or type depending on version.
 // We use 'any' for the baggage operations to avoid version conflicts in the abstraction.
