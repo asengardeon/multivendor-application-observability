@@ -1,0 +1,16 @@
+{
+  "name": "multivendor-application-observability",
+  "version": "1.0.0",
+  "description": "Enterprise Observability Abstraction (OTel, NR, Datadog)",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

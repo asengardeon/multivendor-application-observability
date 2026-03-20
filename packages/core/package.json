@@ -1,0 +1,29 @@
+{
+  "name": "@multivendor/obs-core",
+  "version": "1.0.0",
+  "description": "Core interfaces and abstraction for observability",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/multivendor-application-observability.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "observability",
+    "tracing",
+    "metrics",
+    "logs"
+  ],
+  "author": "CDO Platform Team",
+  "license": "ISC"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@multivendor/obs-provider-newrelic",
+  "version": "1.0.0",
+  "description": "New Relic provider for arco observability",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@multivendor/obs-core": "1.0.0"
+  },
+  "peerDependencies": {
+    "newrelic": "^11.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4",
+    "@types/node": "^20.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/multivendor-application-observability.git"
+  },
+  "author": "CDO Platform Team",
+  "license": "ISC"
+}
