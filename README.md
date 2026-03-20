@@ -156,18 +156,8 @@ Se você estiver usando um bundler:
 O projeto utiliza **GitHub Actions** para automação de testes e distribuição:
 
 - **CI (`ci.yml`)**: Executado em cada Push ou Pull Request para as branches `main` ou `master`. Realiza o build de todos os pacotes em múltiplas versões de Node.js.
-- **Release (`release.yml`)**: Executado ao criar uma tag (ex: `v1.0.0`). Realiza o build e publica todos os pacotes no **NPM** e no **GitHub Packages**.
+- **Release (`release.yml`)**: Executado ao criar uma tag (ex: `v1.0.0`). Realiza o build e publica todos os pacotes no **NPM**.
   - Requisito NPM: Segredo `NPM_TOKEN` configurado no repositório.
-  - Requisito GitHub: Utiliza o `GITHUB_TOKEN` automático para a publicação.
-
-### Instalando via GitHub Packages
-
-Para instalar os pacotes via GitHub Packages, você precisa configurar o seu arquivo `.npmrc` para apontar o escopo `@multivendor` para o registro do GitHub:
-
-```text
-@multivendor:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=SEU_GITHUB_TOKEN
-```
 
 ## Licença
 
