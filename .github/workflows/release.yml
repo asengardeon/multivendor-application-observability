@@ -32,16 +32,21 @@ jobs:
 
       - name: Update version across all packages 🔄
         run: |
-          npm version ${{ steps.extract_version.outputs.VERSION }} --no-git-tag-version --include-workspace-root --workspaces
-          # Atualiza as dependências entre os pacotes do monorepo se necessário
-          # O npm version acima atualiza a versão do pacote, mas não as referências em outros pacotes automaticamente sem flags extras ou ferramentas como lerna/changesets
-          # Para garantir que todos apontem para a versão da release:
-          grep -rl '"@multivendor/obs-core":' packages/*/package.json | xargs sed -i.bak 's/"@multivendor\/obs-core": "[^"]*"/"@multivendor\/obs-core": "${{ steps.extract_version.outputs.VERSION }}"/g'
+          VERSION=${{ steps.extract_version.outputs.VERSION }}
+          echo "Updating all packages to version $VERSION"
+          
+          # Atualiza a versão do root e de todos os workspaces
+          npm version $VERSION --no-git-tag-version --include-workspace-root --workspaces
+          
+          # Atualiza as dependências internas (@multivendor/*) em cada package.json
+          # O sed substituirá a versão de qualquer pacote @multivendor/* pela atual da release
+          # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
+          find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
 
       # RELEASE
       - name: Install dependencies and build 🔧
         run: npm ci
-      - name: Publish package on NPM 📦
-        run: npm publish --access public
+      - name: Publish packages on NPM 📦
+        run: npm publish --workspaces --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

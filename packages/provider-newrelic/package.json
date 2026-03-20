@@ -1,6 +1,6 @@
 {
   "name": "@multivendor/obs-provider-newrelic",
-  "version": "1.0.0",
+  "version": "0.0.6-beta",
   "description": "New Relic provider for arco observability",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@multivendor/obs-core": "1.0.0"
+    "@multivendor/obs-core": "0.0.6-beta"
   },
   "peerDependencies": {
     "newrelic": "^11.0.0"
