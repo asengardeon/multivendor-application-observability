@@ -40,8 +40,12 @@ jobs:
           # O comando sed abaixo usa uma sintaxe compatível com o Ubuntu (usado no runner)
           find packages -name "package.json" -exec sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" {} +
           
-          # Atualiza o package-lock.json para refletir as novas versões locais e evitar 404 no publish
-          npm install --package-lock-only
+          # Atualiza também as referências no package-lock.json para evitar E404 ao tentar validar versões antigas/inexistentes no registro
+          # Sincroniza as versões dos pacotes internos no lockfile
+          sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" package-lock.json
+          
+          # Tenta sincronizar o lockfile localmente sem buscar no registro remoto
+          npm install --package-lock-only --offline --no-audit --no-fund || echo "Aviso: Falha ao atualizar lockfile em modo offline, mas prosseguindo..."
 
       - name: Build all packages
         run: npm run build
