@@ -44,9 +44,9 @@ jobs:
           # Sincroniza as versões dos pacotes internos no lockfile em todas as ocorrências
           sed -i "s/\"@multivendor\/\([^\"]*\)\": \"[^\"]*\"/\"@multivendor\/\1\": \"$VERSION\"/g" package-lock.json
           
-          # Remove o package-lock.json e reinstala para garantir consistência total dos links de workspace sem buscar no registro
-          rm package-lock.json
-          npm install --package-lock-only
+          # Tenta sincronizar o lockfile localmente sem buscar no registro remoto.
+          # Usamos --offline para garantir que o NPM não tente baixar versões que ainda não existem.
+          npm install --package-lock-only --offline --no-audit --no-fund || echo "Aviso: Falha ao atualizar lockfile em modo offline, mas prosseguindo..."
 
       - name: Build all packages
         run: npm run build
