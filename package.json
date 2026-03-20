@@ -2,7 +2,6 @@
   "name": "multivendor-application-observability",
   "version": "1.0.0",
   "description": "Enterprise Observability Abstraction (OTel, NR, Datadog)",
-  "private": true,
   "workspaces": [
     "packages/*"
   ],
