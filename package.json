@@ -2,6 +2,10 @@
   "name": "multivendor-application-observability",
   "version": "1.0.0",
   "description": "Enterprise Observability Abstraction (OTel, NR, Datadog)",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
   "workspaces": [
     "packages/*"
   ],

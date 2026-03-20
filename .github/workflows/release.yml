@@ -25,10 +25,23 @@ jobs:
 
       - name: Build all packages
         run: npm run build
+
+      - name: Extract version from tag 🏷️
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update version across all packages 🔄
+        run: |
+          npm version ${{ steps.extract_version.outputs.VERSION }} --no-git-tag-version --include-workspace-root --workspaces
+          # Atualiza as dependências entre os pacotes do monorepo se necessário
+          # O npm version acima atualiza a versão do pacote, mas não as referências em outros pacotes automaticamente sem flags extras ou ferramentas como lerna/changesets
+          # Para garantir que todos apontem para a versão da release:
+          grep -rl '"@multivendor/obs-core":' packages/*/package.json | xargs sed -i.bak 's/"@multivendor\/obs-core": "[^"]*"/"@multivendor\/obs-core": "${{ steps.extract_version.outputs.VERSION }}"/g'
+
       # RELEASE
       - name: Install dependencies and build 🔧
         run: npm ci
       - name: Publish package on NPM 📦
-        run: npm publish
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
